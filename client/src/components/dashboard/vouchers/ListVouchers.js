@@ -1,10 +1,12 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState, useCallback } from "react";
 import EditVoucher from "./EditVoucher";
 import Moment from "moment";
+import { toast } from "react-toastify";
 
 const ListTodos = ({ allVouchers, setVouchersChange }) => {
   const [vouchers, setVouchers] = useState([]);
   const [allCategories, setAllCategories] = useState([]);
+  const [total, setTotal] = useState("");
 
   //delete todo function
   const categories = async () => {
@@ -29,6 +31,7 @@ const ListTodos = ({ allVouchers, setVouchersChange }) => {
         }
       );
       setVouchersChange(true);
+      toast.success("Voucher deleted!");
       setVouchers(vouchers.filter((voucher) => voucher.id !== id));
     } catch (err) {
       console.error(err.message);
@@ -46,14 +49,46 @@ const ListTodos = ({ allVouchers, setVouchersChange }) => {
   //   }
   // };
 
+  const generateTotalBudget = useCallback(() => {
+    // const assets = allVouchers
+    //   .filter((v) => v.voucher_type === "Asset")
+    //   .reduce((a, r) => a.voucher_value + r.voucher_value);
+    // console.log(assets);
+    // setTotal(assets);
+    const initialValue = 0;
+    const liability = allVouchers
+      .filter((v) => v.voucher_type === "Liability")
+      .map((l) => l.voucher_value)
+      .reduce((prev, asset) => prev + asset, initialValue);
+    const assets = allVouchers
+      .filter((v) => v.voucher_type === "Asset")
+      .map((l) => l.voucher_value)
+      .reduce((prev, asset) => prev + asset, initialValue);
+    const total = assets - liability;
+    setTotal(total);
+  }, [allVouchers]);
+
   useEffect(() => {
     categories();
     setVouchers(allVouchers);
-  }, [allVouchers]);
+    generateTotalBudget();
+  }, [allVouchers, generateTotalBudget]);
 
   return (
     <Fragment>
-      {" "}
+      <h2 className="pt-2 pl-5">
+        {total === 0 ? (
+          <></>
+        ) : total > 0 ? (
+          <>
+            Total: <div className="text-success d-inline">${total}</div>
+          </>
+        ) : (
+          <>
+            Total: <div className="text-danger d-inline">${total}</div>
+          </>
+        )}
+      </h2>
       <table className="table mt-5 text-center">
         <thead>
           <tr>
@@ -68,10 +103,10 @@ const ListTodos = ({ allVouchers, setVouchersChange }) => {
         </thead>
         <tbody>
           {/*<tr>
-            <td>John</td>
-            <td>Doe</td>
-            <td>john@example.com</td>
-          </tr> */}
+      <td>John</td>
+      <td>Doe</td>
+      <td>john@example.com</td>
+    </tr> */}
 
           {vouchers[0]?.voucher_id !== null &&
             vouchers.map((voucher) => (

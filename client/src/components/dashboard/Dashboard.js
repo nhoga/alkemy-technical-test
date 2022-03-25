@@ -37,7 +37,7 @@ const Dashboard = ({ setAuth }) => {
     <>
       <div className="d-flex mt-5 justify-content-around">
         {" "}
-        <h2>{name}, budget</h2>
+        <h2>{name}, personal budget</h2>
         <button className="btn btn-primary" onClick={(e) => logout(e)}>
           Logout
         </button>

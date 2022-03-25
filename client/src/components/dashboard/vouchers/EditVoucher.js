@@ -1,4 +1,5 @@
 import React, { Fragment, useState, useEffect } from "react";
+import { toast } from "react-toastify";
 
 const EditTodo = ({ voucher, setVouchersChange }) => {
   const [name, setName] = useState(voucher.voucher_name);
@@ -32,7 +33,7 @@ const EditTodo = ({ voucher, setVouchersChange }) => {
 
   useEffect(() => {
     categories();
-  });
+  }, []);
 
   const updateDescription = async (e) => {
     e.preventDefault();
@@ -51,6 +52,7 @@ const EditTodo = ({ voucher, setVouchersChange }) => {
         }
       );
       setVouchersChange(true);
+      toast.success("Voucher edited!");
 
       // window.location = "/";
     } catch (err) {
@@ -97,21 +99,21 @@ const EditTodo = ({ voucher, setVouchersChange }) => {
               <input
                 type="text"
                 disabled
-                className="form-control"
+                className="form-control mt-2"
                 value={type}
                 onChange={(e) => setType(e.target.value)}
               />
 
               <input
                 type="number"
-                className="form-control"
+                className="form-control mt-2"
                 value={value}
                 onChange={(e) => setValue(e.target.value)}
               />
 
               <input
                 type="date"
-                className="form-control"
+                className="form-control mt-2"
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
               />
