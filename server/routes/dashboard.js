@@ -11,7 +11,7 @@ router.get("/", authorization, async (req, res) => {
     //   [req.user.id]
     // );
     const user = await pool.query(
-      "SELECT u.user_name,u.user_email,v.voucher_name,v.voucher_type,v.voucher_value,v.voucher_date FROM users AS u LEFT JOIN vouchers AS v ON u.user_id = v.user_id WHERE u.user_id = $1",
+      "SELECT u.user_name,u.user_email,v.voucher_name,v.voucher_type,v.voucher_id,v.voucher_value,v.voucher_date,v.category_id FROM users AS u LEFT JOIN vouchers AS v ON u.user_id = v.user_id WHERE u.user_id = $1",
       [req.user.id]
     );
     res.json(user.rows);
@@ -78,10 +78,12 @@ router.delete("/category/:id", async (req, res) => {
 router.post("/vouchers", authorization, async (req, res) => {
   try {
     const { name, category, type, value, date } = req.body;
-    const newVoucher = await pool.query(
-      "INSERT INTO vouchers (user_id,category_id,voucher_name,voucher_type,voucher_value,voucher_date) VALUES ($1,$2,$3,$4,$5,$6) RETURNING *",
-      [req.user.id, category, name, type, value, date]
-    );
+    const newVoucher =
+      type !== "" &&
+      (await pool.query(
+        "INSERT INTO vouchers (user_id,category_id,voucher_name,voucher_type,voucher_value,voucher_date) VALUES ($1,$2,$3,$4,$5,$6) RETURNING *",
+        [req.user.id, category, name, type, value, date]
+      ));
     res.json(newVoucher.rows[0]);
   } catch (err) {
     console.error(err.message);

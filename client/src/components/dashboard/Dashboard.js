@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
+import InputVoucher from "./vouchers/InputVoucher";
+import ListVouchers from "./vouchers/ListVouchers";
+
 const Dashboard = ({ setAuth }) => {
   const [name, setName] = useState("");
+  const [allVouchers, setAllVouchers] = useState([]);
+  const [vouchersChange, setVouchersChange] = useState(false);
 
   const getName = async () => {
     try {
@@ -10,7 +15,8 @@ const Dashboard = ({ setAuth }) => {
         headers: { token: localStorage.token },
       });
       const parsedRes = await response.json();
-      setName(parsedRes.user_name);
+      setAllVouchers(parsedRes.reverse());
+      setName(parsedRes[0].user_name);
     } catch (err) {
       console.error(err.message);
     }
@@ -25,13 +31,23 @@ const Dashboard = ({ setAuth }) => {
 
   useEffect(() => {
     getName();
-  });
+    setVouchersChange(false);
+  }, [vouchersChange]);
   return (
     <>
-      <h1>Dashboard, hello {name}</h1>
-      <button className="btn btn-primary" onClick={(e) => logout(e)}>
-        Logout
-      </button>
+      <div className="d-flex mt-5 justify-content-around">
+        {" "}
+        <h2>{name}, budget</h2>
+        <button className="btn btn-primary" onClick={(e) => logout(e)}>
+          Logout
+        </button>
+      </div>
+
+      <InputVoucher setVouchersChange={setVouchersChange} />
+      <ListVouchers
+        setVouchersChange={setVouchersChange}
+        allVouchers={allVouchers}
+      />
     </>
   );
 };

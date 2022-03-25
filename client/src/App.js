@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Dashboard from "./components/dashboard/Dashboard";
 import Login from "./components/Login";
 import Register from "./components/Register";
+import Lading from "./components/Landing";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -39,6 +40,17 @@ const App = () => {
       <BrowserRouter>
         <div className="container">
           <Routes>
+            <Route
+              exact
+              path="/"
+              element={
+                !isAuthenticated ? (
+                  <Lading setAuth={setAuth} />
+                ) : (
+                  <Navigate to="/dashboard" />
+                )
+              }
+            ></Route>
             <Route
               exact
               path="/login"
