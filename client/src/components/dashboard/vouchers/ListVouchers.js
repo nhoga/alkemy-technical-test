@@ -7,6 +7,9 @@ const ListTodos = ({ allVouchers, setVouchersChange }) => {
   const [vouchers, setVouchers] = useState([]);
   const [allCategories, setAllCategories] = useState([]);
   const [total, setTotal] = useState("");
+  const [filterType, setFilterType] = useState("");
+  const [filterCategory, setFilterCategory] = useState("");
+  const [showCategories, setShowCategories] = useState([]);
 
   //delete todo function
   const categories = async () => {
@@ -14,10 +17,12 @@ const ListTodos = ({ allVouchers, setVouchersChange }) => {
       method: "GET",
     });
     const parsedResponse = await response.json();
+    console.log(parsedResponse);
     const cleanCategories = parsedResponse.filter(
       (value, index, self) =>
         index === self.findIndex((t) => t.category_id === value.category_id)
     );
+    console.log(cleanCategories);
     setAllCategories(cleanCategories);
   };
 
@@ -37,16 +42,24 @@ const ListTodos = ({ allVouchers, setVouchersChange }) => {
       console.error(err.message);
     }
   };
+  const filterCategories = useCallback(() => {
+    if (filterCategory !== "") {
+      const ok = allVouchers.filter(
+        (v) => v.category_id === Number(filterCategory)
+      );
 
-  // const getTodos = async () => {
-  //   try {
-  //     const response = await fetch("http://localhost:5000/todos");
-  //     const jsonData = await response.json();
+      setVouchers(ok);
+    }
+  }, [allVouchers, filterCategory]);
 
-  //     setTodos(jsonData);
-  //   } catch (err) {
-  //     console.error(err.message);
-  //   }
+  // const vouchersCategories = () => {
+  //   const items = vouchers.map((v) => v.category_id);
+  //   const filteredCategories = allCategories.filter((c) =>
+  //     items.includes(c.category_id)
+  //   );
+  //   console.log(filteredCategories);
+  //   console.log(showCategories);
+  //   setShowCategories(filterCategories);
   // };
 
   const generateTotalBudget = useCallback(() => {
@@ -68,11 +81,26 @@ const ListTodos = ({ allVouchers, setVouchersChange }) => {
     setTotal(total);
   }, [allVouchers]);
 
+  const filterTypes = useCallback(() => {
+    if (filterType === "asset") {
+      const assets = allVouchers.filter((v) => v.voucher_type === "Asset");
+      setVouchers(assets);
+    } else if (filterType === "liability") {
+      const liability = allVouchers.filter(
+        (v) => v.voucher_type === "Liability"
+      );
+      setVouchers(liability);
+    }
+  }, [allVouchers, filterType]);
+
   useEffect(() => {
     categories();
     setVouchers(allVouchers);
+    filterTypes();
+    filterCategories();
+    // vouchersCategories();
     generateTotalBudget();
-  }, [allVouchers, generateTotalBudget]);
+  }, [allVouchers, filterCategories, filterTypes, generateTotalBudget]);
 
   return (
     <Fragment>
@@ -89,6 +117,37 @@ const ListTodos = ({ allVouchers, setVouchersChange }) => {
           </>
         )}
       </h2>
+
+      <div className="pl-5">
+        {" "}
+        <select
+          className="form-control mt-2 "
+          name="type"
+          onChange={(e) => setFilterType(e.target.value)}
+          value={filterType}
+        >
+          <option value="">Filter by Type</option>
+          <option value="asset">Asset</option>
+          <option value="liability">Liability</option>
+        </select>
+        <select
+          className="form-control mt-2 "
+          name="type"
+          onChange={(e) => setFilterCategory(e.target.value)}
+          value={filterCategory}
+        >
+          <option value="">Filter by Category</option>
+
+          {showCategories?.map((c) => {
+            return (
+              <option key={c.category_id} value={c.category_id}>
+                {c.category_name}
+              </option>
+            );
+          })}
+        </select>
+      </div>
+
       <table className="table mt-5 text-center">
         <thead>
           <tr>

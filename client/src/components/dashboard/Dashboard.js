@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { toast } from "react-toastify";
 import InputVoucher from "./vouchers/InputVoucher";
 import ListVouchers from "./vouchers/ListVouchers";
@@ -44,6 +44,7 @@ const Dashboard = ({ setAuth }) => {
       </div>
 
       <InputVoucher setVouchersChange={setVouchersChange} />
+
       <ListVouchers
         setVouchersChange={setVouchersChange}
         allVouchers={allVouchers}
