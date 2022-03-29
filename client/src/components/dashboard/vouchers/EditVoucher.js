@@ -9,8 +9,6 @@ const EditVoucher = ({ voucher, setVouchersChange }) => {
   const [category, setCategory] = useState(voucher.category_id);
   const [allCategories, setAllCategories] = useState([]);
 
-  //edit description function
-
   const stayData = (data) => {
     setName(data.voucher_name);
     setType(data.voucher_type);
@@ -52,8 +50,6 @@ const EditVoucher = ({ voucher, setVouchersChange }) => {
       );
       setVouchersChange(true);
       toast.success("Voucher edited!");
-
-      // window.location = "/";
     } catch (err) {
       console.error(err.message);
     }
@@ -70,9 +66,6 @@ const EditVoucher = ({ voucher, setVouchersChange }) => {
         Edit
       </button>
 
-      {/* 
-        id = id10
-      */}
       <div className="modal" id={`id${voucher?.voucher_id}`}>
         <div className="modal-dialog">
           <div className="modal-content">

@@ -57,8 +57,6 @@ const InputVoucher = ({ setVouchersChange }) => {
         setCategory("");
         setDate("");
       }
-
-      // window.location = "/";
     } catch (err) {
       console.error(err.message);
     }

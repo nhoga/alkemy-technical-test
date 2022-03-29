@@ -6,10 +6,6 @@ const authorization = require("../middleware/authorization");
 
 router.get("/", authorization, async (req, res) => {
   try {
-    // const user = await pool.query(
-    //   "SELECT user_name,user_email FROM users WHERE user_id = $1",
-    //   [req.user.id]
-    // );
     const user = await pool.query(
       "SELECT u.user_name,u.user_email,v.voucher_name,v.voucher_type,v.voucher_id,v.voucher_value,v.voucher_date,v.category_id FROM users AS u LEFT JOIN vouchers AS v ON u.user_id = v.user_id WHERE u.user_id = $1",
       [req.user.id]

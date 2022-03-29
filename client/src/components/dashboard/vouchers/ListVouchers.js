@@ -11,7 +11,6 @@ const ListVouchers = ({ allVouchers, setVouchersChange }) => {
   const [filterCategory, setFilterCategory] = useState("");
   const [showCategories, setShowCategories] = useState([]);
 
-  //delete todo function
   const categories = async () => {
     const response = await fetch("http://localhost:5000/dashboard/category", {
       method: "GET",
@@ -156,12 +155,6 @@ const ListVouchers = ({ allVouchers, setVouchersChange }) => {
           </tr>
         </thead>
         <tbody>
-          {/*<tr>
-      <td>John</td>
-      <td>Doe</td>
-      <td>john@example.com</td>
-    </tr> */}
-
           {vouchers[0]?.voucher_id !== null &&
             vouchers.map((voucher) => (
               <tr key={voucher.voucher_id}>
