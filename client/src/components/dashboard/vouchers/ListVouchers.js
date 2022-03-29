@@ -55,7 +55,6 @@ const ListTodos = ({ allVouchers, setVouchersChange }) => {
     const filteredCategories = allCategories.filter((c) =>
       items.includes(c.category_id)
     );
-    console.log(filteredCategories);
     setShowCategories(filteredCategories);
   }, [total]);
 
