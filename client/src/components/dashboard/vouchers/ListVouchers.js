@@ -17,12 +17,10 @@ const ListTodos = ({ allVouchers, setVouchersChange }) => {
       method: "GET",
     });
     const parsedResponse = await response.json();
-    console.log(parsedResponse);
     const cleanCategories = parsedResponse.filter(
       (value, index, self) =>
         index === self.findIndex((t) => t.category_id === value.category_id)
     );
-    console.log(cleanCategories);
     setAllCategories(cleanCategories);
   };
 
@@ -52,22 +50,16 @@ const ListTodos = ({ allVouchers, setVouchersChange }) => {
     }
   }, [allVouchers, filterCategory]);
 
-  // const vouchersCategories = () => {
-  //   const items = vouchers.map((v) => v.category_id);
-  //   const filteredCategories = allCategories.filter((c) =>
-  //     items.includes(c.category_id)
-  //   );
-  //   console.log(filteredCategories);
-  //   console.log(showCategories);
-  //   setShowCategories(filterCategories);
-  // };
+  const vouchersCategories = useCallback(() => {
+    const items = vouchers.map((v) => v.category_id);
+    const filteredCategories = allCategories.filter((c) =>
+      items.includes(c.category_id)
+    );
+    console.log(filteredCategories);
+    setShowCategories(filteredCategories);
+  }, [total]);
 
   const generateTotalBudget = useCallback(() => {
-    // const assets = allVouchers
-    //   .filter((v) => v.voucher_type === "Asset")
-    //   .reduce((a, r) => a.voucher_value + r.voucher_value);
-    // console.log(assets);
-    // setTotal(assets);
     const initialValue = 0;
     const liability = allVouchers
       .filter((v) => v.voucher_type === "Liability")
@@ -98,9 +90,15 @@ const ListTodos = ({ allVouchers, setVouchersChange }) => {
     setVouchers(allVouchers);
     filterTypes();
     filterCategories();
-    // vouchersCategories();
+    vouchersCategories();
     generateTotalBudget();
-  }, [allVouchers, filterCategories, filterTypes, generateTotalBudget]);
+  }, [
+    vouchersCategories,
+    allVouchers,
+    filterCategories,
+    filterTypes,
+    generateTotalBudget,
+  ]);
 
   return (
     <Fragment>

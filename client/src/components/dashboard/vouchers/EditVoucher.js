@@ -35,8 +35,7 @@ const EditTodo = ({ voucher, setVouchersChange }) => {
     categories();
   }, []);
 
-  const updateDescription = async (e) => {
-    e.preventDefault();
+  const updateDescription = async () => {
     try {
       const body = { name, type, value, date, category };
       const myHeaders = new Headers();
