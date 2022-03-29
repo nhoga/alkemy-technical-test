@@ -1,7 +1,7 @@
 import React, { Fragment, useState, useEffect } from "react";
 import { toast } from "react-toastify";
 
-const InputTodo = ({ setVouchersChange }) => {
+const InputVoucher = ({ setVouchersChange }) => {
   const [name, setName] = useState("");
   const [type, setType] = useState("");
   const [value, setValue] = useState("");
@@ -38,7 +38,7 @@ const InputTodo = ({ setVouchersChange }) => {
         toast.error("Complete all the fields");
       } else if (body.name && body.type && body.category) {
         toast.success("Voucher registered!");
-        console.log(body);
+
         const response = await fetch(
           "http://localhost:5000/dashboard/vouchers",
           {
@@ -48,9 +48,8 @@ const InputTodo = ({ setVouchersChange }) => {
           }
         );
 
-        const parsedResponse = await response.json();
+        await response.json();
 
-        console.log(parsedResponse);
         setVouchersChange(true);
         setName("");
         setType("");
@@ -124,4 +123,4 @@ const InputTodo = ({ setVouchersChange }) => {
   );
 };
 
-export default InputTodo;
+export default InputVoucher;

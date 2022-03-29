@@ -3,7 +3,7 @@ import EditVoucher from "./EditVoucher";
 import Moment from "moment";
 import { toast } from "react-toastify";
 
-const ListTodos = ({ allVouchers, setVouchersChange }) => {
+const ListVouchers = ({ allVouchers, setVouchersChange }) => {
   const [vouchers, setVouchers] = useState([]);
   const [allCategories, setAllCategories] = useState([]);
   const [total, setTotal] = useState("");
@@ -24,15 +24,12 @@ const ListTodos = ({ allVouchers, setVouchersChange }) => {
     setAllCategories(cleanCategories);
   };
 
-  const deleteTodo = async (id) => {
+  const deleteVoucher = async (id) => {
     try {
-      const deleteTodo = await fetch(
-        `http://localhost:5000/dashboard/vouchers/${id}`,
-        {
-          method: "DELETE",
-          headers: { token: localStorage.token },
-        }
-      );
+      await fetch(`http://localhost:5000/dashboard/vouchers/${id}`, {
+        method: "DELETE",
+        headers: { token: localStorage.token },
+      });
       setVouchersChange(true);
       toast.success("Voucher deleted!");
       setVouchers(vouchers.filter((voucher) => voucher.id !== id));
@@ -56,6 +53,7 @@ const ListTodos = ({ allVouchers, setVouchersChange }) => {
       items.includes(c.category_id)
     );
     setShowCategories(filteredCategories);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [total]);
 
   const generateTotalBudget = useCallback(() => {
@@ -190,7 +188,7 @@ const ListTodos = ({ allVouchers, setVouchersChange }) => {
                   <>
                     <button
                       className="btn btn-danger"
-                      onClick={() => deleteTodo(voucher.voucher_id)}
+                      onClick={() => deleteVoucher(voucher.voucher_id)}
                     >
                       Delete
                     </button>
@@ -204,4 +202,4 @@ const ListTodos = ({ allVouchers, setVouchersChange }) => {
   );
 };
 
-export default ListTodos;
+export default ListVouchers;

@@ -1,7 +1,7 @@
 import React, { Fragment, useState, useEffect } from "react";
 import { toast } from "react-toastify";
 
-const EditTodo = ({ voucher, setVouchersChange }) => {
+const EditVoucher = ({ voucher, setVouchersChange }) => {
   const [name, setName] = useState(voucher.voucher_name);
   const [type, setType] = useState(voucher.voucher_type);
   const [value, setValue] = useState(voucher.voucher_value);
@@ -42,7 +42,7 @@ const EditTodo = ({ voucher, setVouchersChange }) => {
       myHeaders.append("Content-Type", "application/json");
       myHeaders.append("token", localStorage.token);
 
-      const response = await fetch(
+      await fetch(
         `http://localhost:5000/dashboard/vouchers/${voucher.voucher_id}`,
         {
           method: "PUT",
@@ -159,4 +159,4 @@ const EditTodo = ({ voucher, setVouchersChange }) => {
   );
 };
 
-export default EditTodo;
+export default EditVoucher;

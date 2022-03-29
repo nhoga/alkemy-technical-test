@@ -27,7 +27,7 @@ const Register = ({ setAuth }) => {
       });
 
       const parsedRes = await response.json();
-      console.log(parsedRes);
+
       if (parsedRes.jwtToken) {
         localStorage.setItem("token", parsedRes.jwtToken);
         setAuth(true);
